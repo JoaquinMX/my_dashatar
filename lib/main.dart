@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,32 +9,65 @@ void main() {
   );
 }
 
-class DashatarApp extends StatelessWidget {
+class DashatarApp extends StatefulWidget {
   const DashatarApp({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
-    List<Text> a = [Text("Dash 1"), Text("Dash 2")];
+  State<DashatarApp> createState() => _DashatarAppState();
+}
 
+class _DashatarAppState extends State<DashatarApp> {
+  int appbarCount = 0;
+  int scaffoldCount = 0;
+  List sounds = ['Kick.wav', 'Snare.wav', 'Tom.wav', 'Ride.wav'];
+  int soundPosition = 0;
+  final player = AudioPlayer();
+  List<Color> colors = [
+    Colors.yellow,
+    Colors.teal,
+    Colors.green,
+    Colors.blue,
+    Colors.deepPurple,
+    Colors.pinkAccent
+  ];
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.deepPurple,
         appBar: AppBar(
-          backgroundColor: Color(0xFF000000),
+          backgroundColor: colors[appbarCount],
           centerTitle: true,
-          title: a[0],
+          title: IconButton(
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.brown,
+            ),
+            onPressed: () {
+              soundPosition = Random().nextInt(4);
+            },
+          ),
         ),
         body: ListView(
           children: [
             Container(
               height: 100,
               width: 100,
-              color: Colors.yellow,
-              child: Image.asset(
-                'images/dashatar.png',
+              color: colors[scaffoldCount],
+              child: MaterialButton(
+                onPressed: () {
+                  setState(() {
+                    scaffoldCount = Random().nextInt(6);
+                    appbarCount = Random().nextInt(6);
+                    player.play(AssetSource(sounds[soundPosition]));
+                  });
+                },
+                child: Image.asset(
+                  'images/dashatar.png',
+                ),
               ),
             ),
             Container(
